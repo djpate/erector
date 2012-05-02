@@ -55,7 +55,5 @@ class ExternalRenderer < Erector::Widget
     end
   end
 
-  def 
-
 end
 
