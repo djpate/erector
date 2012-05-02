@@ -1,7 +1,7 @@
 class ExternalRenderer < Erector::Widget
   needs :classes
   needs :included_stylesheets => true, :inline_styles => true, :included_scripts => true, :inline_scripts => true
-  
+
   def content
     included_stylesheets if @included_stylesheets
     inline_styles if @inline_styles
@@ -54,6 +54,8 @@ class ExternalRenderer < Erector::Widget
       jquery :load, external.text, external.options
     end
   end
+
+  def 
 
 end
 

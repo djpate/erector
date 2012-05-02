@@ -161,6 +161,7 @@ class Erector::Widgets::Page < Erector::InlineWidget
     included_widgets = [self.class] + output.widgets.to_a + extra_widgets
     renderer = ExternalRenderer.new(:classes => included_widgets)
     renderer.included_stylesheets
+    renderer.inline_styles
   end
 
   def included_bottom_content
@@ -169,6 +170,7 @@ class Erector::Widgets::Page < Erector::InlineWidget
     included_widgets = [self.class] + output.widgets.to_a + extra_widgets
     renderer = ExternalRenderer.new(:classes => included_widgets)
     renderer.included_scripts
+    renderer.inline_scripts
   end
   
   def extra_widgets
