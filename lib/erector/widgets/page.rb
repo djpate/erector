@@ -156,25 +156,20 @@ class Erector::Widgets::Page < Erector::InlineWidget
   end
   
   def included_head_content
-    # now that we've rendered the whole page, it's the right time
-    # to ask what all widgets were rendered to the output stream
     included_widgets = [self.class] + output.widgets.to_a + extra_widgets
     renderer = ExternalRenderer.new(:classes => included_widgets)
-    renderer.included_stylesheets
-    renderer.inline_styles
+    renderer.to_html.to_s.scan(/(<link .*>)/).join
   end
 
   def included_bottom_content
-    # now that we've rendered the whole page, it's the right time
-    # to ask what all widgets were rendered to the output stream
-    included_widgets = [self.class] + output.widgets.to_a + extra_widgets
+   included_widgets = [self.class] + output.widgets.to_a + extra_widgets
     renderer = ExternalRenderer.new(:classes => included_widgets)
-    renderer.included_scripts
-    renderer.inline_scripts
+    renderer.to_html.to_s.scan(/(<script .*>)/).join
   end
   
   def extra_widgets
     []
   end
 end
+
 
