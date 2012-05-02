@@ -105,8 +105,6 @@ class Erector::Widgets::Page < Erector::InlineWidget
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
   end
 
-  qsdfdqfg
-
   def content
     extra_head_slot = nil
     extra_bottom_slot = nil
