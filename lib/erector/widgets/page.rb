@@ -7,15 +7,14 @@
 # declare it.
 #
 # The script and style declarations are accumulated at class load time, as
-# 'dependencies'. This technique allows all widgets to add their own
-# requirements to the page header without extra logic for declaring which
-# pages include which nested widgets. Fortunately, Page is now smart enough to
-# figure out which widgets were actually rendered during the body_content run,
-# so it only emits into its HEAD the dependencies that are relevant. If it
-# misses some, or if you want to add some extra dependencies -- for instance,
-# styles that apply to widgets that are rendered later via AJAX -- then return
-# an array of those widget classes in your subclass by overriding the
-# #extra_widgets method.
+# 'dependencies'. This technique allows all widgets to add their own requirements
+# to the page header without extra logic for declaring which pages include
+# which nested widgets. Fortunately, Page is now smart enough to figure out
+# which widgets were actually rendered during the body_content run, so it only
+# emits into its HEAD the dependencies that are relevant. If it misses some, or
+# if you want to add some extra dependencies -- for instance, styles that apply
+# to widgets that are rendered later via AJAX -- then return an array of those
+# widget classes in your subclass by overriding the #extra_widgets method.
 #
 # If you want something to show up in the headers for just one page type
 # (subclass), then override #head_content, call super, and then emit it
@@ -94,9 +93,8 @@
 #   end
 #
 # = Thoughts:
-#  * It may be desirable to unify #js and #script, and #css and #style, and
-#    have the routine be smart enough to analyze its parameter to decide
-#    whether to make it a file or a script.
+#  * It may be desirable to unify #js and #script, and #css and #style, and have the routine be
+#    smart enough to analyze its parameter to decide whether to make it a file or a script.
 #
 class Erector::Widgets::Page < Erector::InlineWidget
 
@@ -107,8 +105,11 @@ class Erector::Widgets::Page < Erector::InlineWidget
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
   end
 
+  qsdfdqfg
+
   def content
     extra_head_slot = nil
+    extra_bottom_slot = nil
     rawtext doctype
     html(html_attributes) do
       head do
@@ -121,11 +122,13 @@ class Erector::Widgets::Page < Erector::InlineWidget
         else
           body_content
         end
+        extra_bottom_slot = output.placeholder
       end
     end
     # after everything's been rendered, use the placeholder to
     # insert all the head's dependencies
     extra_head_slot << included_head_content
+    extra_bottom_slot << included_bottom_content
   end
 
   # override me to provide a page title (default = name of the Page subclass)
@@ -160,8 +163,16 @@ class Erector::Widgets::Page < Erector::InlineWidget
     included_widgets = [self.class] + output.widgets.to_a + extra_widgets
     ExternalRenderer.new(:classes => included_widgets).to_html
   end
+
+  def included_bottom_content
+    # now that we've rendered the whole page, it's the right time
+    # to ask what all widgets were rendered to the output stream
+    included_widgets = [self.class] + output.widgets.to_a + extra_widgets
+    ExternalRenderer.new(:classes => included_widgets).to_html
+  end
   
   def extra_widgets
     []
   end
 end
+
